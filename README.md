@@ -1,13 +1,12 @@
 
-# 🧠 Character-Level RNN Text Generator (PyTorch)
+#  Character-Level RNN Text Generator (PyTorch)
 
-This project trains a character-level Recurrent Neural Network (RNN) using PyTorch to generate text one character at a time.
+using PyTorch to generate text one character at a time.
 
 ---
 
-## 📦 Requirements
+##  Requirements
 
-- Python 3.7+
 - PyTorch
 - NumPy
 
@@ -19,45 +18,45 @@ pip install torch numpy
 
 ---
 
-## 🚀 Training the Model
+##  Training the Model
 
 Train on `sample.txt` with default settings:
-
+upload your sample.txt in the same folder as .py file 
 ```bash
-python your_script.py
+python day1_PytorchRNN.py
 ```
 
 Train on custom text with more epochs:
 
 ```bash
-python your_script.py --input custom.txt --epochs 50
+python day1_PytorchRNN.py --input custom.txt --epochs 50
 ```
 
 Change the hidden layer size (e.g., 256 units):
 
 ```bash
-python your_script.py --hidden_size 256
+python day1_PytorchRNN.py --hidden_size 256
 ```
 
 ---
 
-## ✍️ Generate Text
+## Generate Text
 
 Generate 200 characters using the trained model:
 
 ```bash
-python your_script.py --generate
+python day1_PytorchRNN.py --generate
 ```
 
 Start with a custom seed and generate 300 characters:
 
 ```bash
-python your_script.py --generate --start "Once upon a time" --length 300
+python day1_PytorchRNN.py --generate --start "He was a " --length 300
 ```
 
 ---
 
-## 🔥 Temperature Explained
+## Temperature Explained
 
 **Temperature** controls the randomness of the output:
 
@@ -68,23 +67,23 @@ python your_script.py --generate --start "Once upon a time" --length 300
 Example:
 
 ```bash
-python your_script.py --generate --temperature 1.2
+python day1_PytorchRNN.py --generate --temperature 1.2
 ```
 
 ---
 
-## 🧪 Example Output
+##  Example Output
 
 ```
 [Sample after epoch 10]:
-Once upon the morning, and the shadow of the throne,
+He was a shadow of the throne,
 The moonlight sang through windows faint,
 And night was born in stone.
 ```
 
 ---
 
-## 📁 Files
+##  Files
 
 - `charGenRNN.py`: Main script for training and generation
 - `sample.txt`: Example training data
