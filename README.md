@@ -29,7 +29,7 @@ python day1_PytorchRNN.py
 Train on custom text with more epochs:
 
 ```bash
-python day1_PytorchRNN.py --input custom.txt --epochs 50
+python day1_PytorchRNN.py --input sample.txt --epochs 50
 ```
 
 Change the hidden layer size (e.g., 256 units):
