@@ -74,8 +74,8 @@ def train_model(encoded, vocab_size, stoi, itos, epochs=10, seq_length=100, batc
         if (epoch+1) % 2 == 0:                               # Generate sample every 2 epochs
             preview = sample(model, "Once upon", stoi, itos, device)
             print(f"\n[Sample after epoch {epoch+1}]:\n{preview}\n")
-    torch.save(model.state_dict(), 'char_rnn.pt')            # Save trained model
-    print("✅ Model saved to char_rnn.pt")
+    torch.save(model.state_dict(), 'model.pt')            # Save trained model
+    print("Model saved to model.pt")
     return model                                             # Return model object
 
 # CLI interface
@@ -93,7 +93,7 @@ if __name__ == '__main__':                                   # Main entry point
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu') # Set device
     if args.generate:                                        # If generation mode
         model = CharRNN(vocab_size, hidden_size=args.hidden_size).to(device) # Load model
-        model.load_state_dict(torch.load('char_rnn.pt', map_location=device)) # Load weights
+        model.load_state_dict(torch.load('model.pt', map_location=device)) # Load weights
         print(sample(model, args.start, stoi, itos, device, length=args.length, temperature=args.temperature)) # Generate text
     else:                                                    # If training mode
         train_model(encoded, vocab_size, stoi, itos, epochs=args.epochs, hidden_size=args.hidden_size) # Start training
