@@ -2,15 +2,16 @@
 import torch                                                 # PyTorch core library for tensor operations and tensor management
 import torch.nn as nn                                        # Module for building neural networks (layers like LSTM, Linear)
 import torch.nn.functional as F                              # Functional API for layers and activations (e.g., softmax)
-import numpy as np                                           # NumPy for numerical computing (used for sampling predictions)
+import numpy as np                                           
 import argparse                                              # Library for parsing command-line arguments
 
 # Text cleaning function to remove excessive white space
 def clean_text(text):
     import re                                                # Python regex module for pattern matching
-    text = re.sub(r'\n+', '\n', text)                      # Replace multiple newlines with a single newline
+    text = re.sub(r'\n+', '\n', text)                        # Replace multiple newlines with a single newline
     text = re.sub(r' +', ' ', text)                          # Replace multiple spaces with a single space
     text = text.strip()                                      # Remove leading and trailing whitespace
+    print("Text is cleaned up ... ")
     return text                                              # Return the cleaned text
 
 # Load and preprocess dataset
@@ -21,6 +22,7 @@ def load_data(filename):
     stoi = {ch: i for i, ch in enumerate(chars)}             # Create char to index mapping
     itos = {i: ch for ch, i in stoi.items()}                 # Create index to char mapping
     vocab_size = len(chars)                                  # Total number of unique characters
+    print("Vocab size is : " , vocab_size)
     encoded = [stoi[c] for c in text]                        # Encode entire text as a list of integers
     return text, encoded, stoi, itos, vocab_size             # Return all processed data
 
@@ -86,19 +88,19 @@ def train_model(encoded, vocab_size, stoi, itos, epochs=10, seq_length=100, batc
 
         print(f"Epoch {epoch+1}/{epochs}, Loss: {total_loss:.4f}")  # Log epoch loss
         if (epoch+1) % 2 == 0:                              # Sample after every 2 epochs
-            preview = sample(model, "Once upon", stoi, itos, device)
+            preview = sample(model, "He was a ", stoi, itos, device)
             print(f"\n[Sample after epoch {epoch+1}]:\n{preview}\n")
 
-    torch.save(model.state_dict(), 'char_rnn.pt')           # Save trained model to file
-    print("Model saved to char_rnn.pt")                     # Confirm model saving
-    return model                                            # Return trained model
+    torch.save(model.state_dict(), 'model.pt')               # Save trained model to file
+    print("Model saved to model.pt")                         # Confirm model saving
+    return model                                             # Return trained model
 
 # Main entry point when script is run
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Character-Level RNN Text Generator')  # Create CLI parser
     parser.add_argument('--input', type=str, default='sample.txt', help='Training text file')  # Input file
     parser.add_argument('--generate', action='store_true', help='Generate text using saved model')  # Generation mode flag
-    parser.add_argument('--start', type=str, default='Once upon', help='Seed text for generation')  # Seed string
+    parser.add_argument('--start', type=str, default=' He was a ', help='Seed text for generation')  # Seed string
     parser.add_argument('--length', type=int, default=200, help='Characters to generate')  # Output length
     parser.add_argument('--temperature', type=float, default=1.0, help='Sampling temperature')  # Sampling randomness
     parser.add_argument('--epochs', type=int, default=10, help='Number of training epochs')  # Number of training epochs
@@ -107,10 +109,10 @@ if __name__ == '__main__':
 
     text, encoded, stoi, itos, vocab_size = load_data(args.input)  # Load and preprocess input data
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')  # Set device
-
+    print("device is set to :" , device)
     if args.generate:                                          # If generation flag is used
         model = CharRNN(vocab_size, hidden_size=args.hidden_size).to(device)  # Load model
-        model.load_state_dict(torch.load('char_rnn.pt', map_location=device))  # Load saved weights
+        model.load_state_dict(torch.load('model.pt', map_location=device))  # Load saved weights
         print(sample(model, args.start, stoi, itos, device, length=args.length, temperature=args.temperature))  # Generate text
     else:                                                      # Otherwise, train model
         train_model(encoded, vocab_size, stoi, itos, epochs=args.epochs, hidden_size=args.hidden_size)  # Start training
